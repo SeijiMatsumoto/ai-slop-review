@@ -4,26 +4,26 @@ A collection of 15 AI-generated code snippets for practicing code review skills.
 
 ## How to Use
 
-1. Review each file as if it were a real pull request
+1. Open a problem folder and review the code file as if it were a real pull request
 2. Identify as many bugs, security issues, and logic errors as you can
-3. Check your findings against `ANSWER_KEY.md`
+3. Check your findings against the `ANSWER.md` in the same folder
 
-## Files
+## Problems
 
-| #  | File                        | Language       | Topics                          |
+| #  | Folder                        | Language       | Topics                          |
 |----|-----------------------------|----------------|---------------------------------|
-| 01 | `01-user-lookup-api.ts`     | TypeScript     | Null guards, Security           |
-| 02 | `02-pagination-processor.py`| Python         | Off-by-one errors               |
-| 03 | `03-dashboard-card.tsx`     | React/TSX      | Performance, Null guards        |
-| 04 | `04-csv-importer.py`        | Python/Flask   | SQL injection                   |
-| 05 | `05-form-handler.ts`        | TypeScript     | Form handling                   |
-| 06 | `06-async-api-client.py`    | Python         | Async patterns                  |
-| 07 | `07-use-debounce.ts`        | TypeScript     | React hooks                     |
-| 08 | `08-rate-limiter.ts`        | TypeScript     | Rate limiting                   |
-| 09 | `09-data-pipeline.py`       | Python         | Data processing                 |
-| 10 | `10-llm-streaming.ts`       | TypeScript     | LLM streaming                   |
-| 11 | `11-rag-retrieval.py`       | Python         | RAG retrieval                   |
-| 12 | `12-tool-calling-agent.py`  | Python         | Tool calling                    |
-| 13 | `13-prisma-crud.ts`         | TypeScript     | Prisma/CRUD                     |
-| 14 | `14-llm-eval-scorer.py`     | Python         | LLM evaluation                  |
-| 15 | `15-multi-model-router.ts`  | TypeScript     | Model routing                   |
+| 01 | `01-user-lookup-api/`       | TypeScript     | Null guards, Security           |
+| 02 | `02-pagination-processor/`  | Python         | Off-by-one errors               |
+| 03 | `03-dashboard-card/`        | React/TSX      | Performance, Null guards        |
+| 04 | `04-csv-importer/`          | Python/Flask   | SQL injection                   |
+| 05 | `05-form-handler/`          | TypeScript     | Security, Mass assignment       |
+| 06 | `06-async-api-client/`      | Python         | N+1 queries, Hardcoded secrets  |
+| 07 | `07-use-debounce/`          | TypeScript     | Over-engineering, Hallucinated API |
+| 08 | `08-rate-limiter/`          | TypeScript     | Logic errors, Security          |
+| 09 | `09-data-pipeline/`         | Python         | Over-engineering                |
+| 10 | `10-llm-streaming/`         | TypeScript     | Hallucinated APIs, Security     |
+| 11 | `11-rag-retrieval/`         | Python         | Math errors, Silent failures    |
+| 12 | `12-tool-calling-agent/`    | Python         | Infinite loops, Missing guards  |
+| 13 | `13-prisma-crud/`           | TypeScript     | SQL injection, N+1 queries      |
+| 14 | `14-llm-eval-scorer/`       | Python         | Float comparison, Silent failures |
+| 15 | `15-multi-model-router/`    | TypeScript     | Key leakage, Prompt injection   |
