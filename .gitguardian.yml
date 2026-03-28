@@ -1,2 +1,2 @@
 paths-ignore:
-  - "16-webhook-verifier/**"
+  - "typescript/09-webhook-verifier/**"
