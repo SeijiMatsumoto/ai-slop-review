@@ -1,0 +1,32 @@
+# Review Progress
+
+- [ ] 01 — User Lookup API (TypeScript) — Null guards, Security
+- [ ] 02 — Pagination Processor (Python) — Off-by-one errors
+- [ ] 03 — Dashboard Card (React/TSX) — Performance, Null guards
+- [ ] 04 — CSV Importer (Python/Flask) — SQL injection
+- [ ] 05 — Form Handler (TypeScript) — Security, Mass assignment
+- [ ] 06 — Async API Client (Python) — N+1 queries, Hardcoded secrets
+- [ ] 07 — useDebounce Hook (TypeScript) — Over-engineering, Hallucinated API
+- [ ] 08 — Rate Limiter (TypeScript) — Logic errors, Security
+- [ ] 09 — Data Pipeline (Python) — Over-engineering
+- [ ] 10 — LLM Streaming (TypeScript) — Hallucinated APIs, Security
+- [ ] 11 — RAG Retrieval (Python) — Math errors, Silent failures
+- [ ] 12 — Tool-Calling Agent (Python) — Infinite loops, Missing guards
+- [ ] 13 — Prisma CRUD (TypeScript) — SQL injection, N+1 queries
+- [ ] 14 — LLM Eval Scorer (Python) — Float comparison, Silent failures
+- [ ] 15 — Multi-Model Router (TypeScript) — Key leakage, Prompt injection
+- [ ] 16 — Webhook Verifier (TypeScript) — Timing attacks, Replay attacks
+- [ ] 17 — File Upload Handler (Python/FastAPI) — Path traversal, File validation
+- [ ] 18 — Redis Session Store (TypeScript) — Race conditions, Session fixation
+- [ ] 19 — Pagination Cursor (Python/Django) — Cursor tampering, SQL injection
+- [ ] 20 — Retry with Backoff (TypeScript) — Idempotency, Thundering herd
+- [ ] 21 — Background Job Worker (Python/Celery) — Silent data loss, Pickle RCE
+- [ ] 22 — OAuth Callback (TypeScript) — CSRF, Open redirect
+- [ ] 23 — Search Autocomplete (React/TSX) — Race conditions, XSS
+- [ ] 24 — Env Config Loader (Python) — eval() injection, Secret leaks
+- [ ] 25 — WebSocket Chat (TypeScript) — No auth, Memory leaks
+- [ ] 26 — Image Resize Service (Python/FastAPI) — Decompression bomb, EXIF leaks
+- [ ] 27 — Cron Scheduler (TypeScript) — Timezone bugs, DST, Drift
+- [ ] 28 — GraphQL Resolver (TypeScript) — Query depth DoS, N+1
+- [ ] 29 — Password Reset (Python/Flask) — Guessable tokens, User enumeration
+- [ ] 30 — Feature Flag SDK (TypeScript) — Stale closures, Non-deterministic rollout
