@@ -9,7 +9,7 @@ import { db } from "@/lib/db";
 
 const weatherTool = tool({
   description: "Get current weather for a location",
-  parameters: z.object({
+  inputSchema: z.object({
     location: z.string().describe("City name"),
     units: z.enum(["celsius", "fahrenheit"]).default("celsius"),
   }),
@@ -23,7 +23,7 @@ const weatherTool = tool({
 
 const searchTool = tool({
   description: "Search the knowledge base",
-  parameters: z.object({
+  inputSchema: z.object({
     query: z.string(),
     limit: z.number().default(5),
   }),
