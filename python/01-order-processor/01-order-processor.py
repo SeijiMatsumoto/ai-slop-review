@@ -20,7 +20,7 @@ class LineItem:
 
 
 def calculate_subtotal(items: list[LineItem]) -> float:
-    return sum(item.unit_price * (1 - item.discount_pct) for item in items)
+    return sum(item.unit_price * item.quantity * (1 - item.discount_pct) for item in items)
 
 
 def apply_order_discount(subtotal: float, discount_pct: float) -> float:
@@ -38,7 +38,7 @@ def calculate_total(
 ) -> dict:
     subtotal = calculate_subtotal(items)
     after_discount = apply_order_discount(subtotal, order_discount_pct)
-    tax = calculate_tax(subtotal, tax_rate)
+    tax = calculate_tax(after_discount, tax_rate)
     total = after_discount + tax
 
     return {
@@ -55,10 +55,27 @@ def most_expensive_item(items: list[LineItem]) -> LineItem | None:
     return max(items, key=lambda i: i.unit_price * i.quantity)
 
 
-# TODO: Add an apply_coupon(subtotal: float, coupon: dict) -> float function where coupon
-#       has "type" ("flat" or "pct") and "value"; flat coupons should be capped at subtotal
-# TODO: Add a group_by_discount(items: list[LineItem]) -> dict[float, list[LineItem]]
-#       function that groups items by their discount_pct value
+def apply_coupon(subtotal: float, coupon: dict[str, str | float]) -> float:
+    if coupon.get('type') == 'pct':
+        return subtotal * (1 - coupon.get('value') / 100)
+    elif coupon.get('type') == 'flat':
+        if coupon.get('value') >= subtotal:
+            return 0.0
+        return subtotal - coupon.get('value')
+    
+    return subtotal
+
+
+def group_by_discount(items: list[LineItem]) -> dict[float, list[LineItem]]:
+    grouped: dict[float, list[LineItem]] = {}
+
+    for item in items:
+        discount = item.discount_pct
+        if grouped.get(discount) is None:
+            grouped[discount] = []
+        
+        grouped[discount].append(item)
+    return grouped
 
 
 if __name__ == "__main__":
@@ -91,3 +108,16 @@ if __name__ == "__main__":
     best = most_expensive_item(items)
     print(f"  {best.name} (${best.unit_price:.2f} x {best.quantity})")
     print(f"  most_expensive_item([]) -> {most_expensive_item([])}")
+
+    print("\n=== Coupon ===")
+    total_after_pct_coupon = apply_coupon(100, {'type': 'pct', 'value': 50.0})
+    print(f"  50% off of $100 = {total_after_pct_coupon}")
+    total_after_flat_coupon = apply_coupon(100, {'type': 'flat', 'value': 20.0})
+    print(f"  $20 off of $100 = {total_after_flat_coupon}")
+    total_after_flat_coupon = apply_coupon(100, {'type': 'flat', 'value': 120.0})
+    print(f"  $120 off of $100 = {total_after_flat_coupon}")
+
+    print("\n=== Grouped by Discount ===")
+    grouped = group_by_discount(items)
+    print(grouped)
+
