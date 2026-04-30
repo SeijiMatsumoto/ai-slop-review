@@ -1,4 +1,12 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Net position: total quantity held per instrument (positive = long, negative = short)
+#   Gross notional: sum of |quantity × price| across all positions — total dollar exposure
+#   Concentration: one instrument's notional / total portfolio notional (e.g., max 40% in one stock)
+#   Position limit: max allowed net shares in a single instrument
+#   Notional limit: max total dollar exposure across the whole portfolio
+#   Pre-trade check: validate a proposed trade against limits before sending it to market
 
 from dataclasses import dataclass
 

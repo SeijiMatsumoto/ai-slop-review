@@ -1,4 +1,13 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Futures/options contract: an agreement to buy/sell an asset at a set price by a set date
+#   Expiry: the date the contract stops trading and must be settled
+#   Settlement: closing the contract at a defined price on expiry date
+#     Settlement P&L = quantity × (settlement_price - avg_cost)
+#   Roll: closing an expiring contract and re-opening a new one with a later expiry date
+#   Expiry ladder: how many contracts expire on each upcoming date (risk management view)
+#   Symbols: ES = S&P 500 futures, NQ = Nasdaq futures, CL = crude oil futures, GC = gold futures
 
 from dataclasses import dataclass
 

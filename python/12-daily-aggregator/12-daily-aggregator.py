@@ -1,4 +1,11 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Notional: price × quantity — dollar value of a trade
+#   avg_price (simple): sum(prices) / count — just arithmetic mean, NOT volume-weighted
+#   VWAP: sum(price × quantity) / sum(quantity) — volume-weighted; more accurate than simple avg
+#   Daily P&L: (close_price - avg_entry_price) × net_quantity — how much you made on the day
+#   Net quantity: total bought minus total sold for an instrument on a given day
 
 from dataclasses import dataclass
 from collections import defaultdict

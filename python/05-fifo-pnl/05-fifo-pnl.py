@@ -1,4 +1,12 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   FIFO (First In, First Out): when selling, consume the oldest buy lots first
+#   Lot: a single purchase batch — e.g., "100 shares bought at $150"
+#   Realized P&L: profit/loss from shares already sold
+#     Formula per lot: sold_qty * (sell_price - lot_buy_price) — computed lot by lot
+#   Open lots: shares still held (not yet sold), waiting to be matched against future sells
+#   FIFO vs LIFO: FIFO sells oldest lots first; LIFO sells newest first (different tax/accounting impact)
 
 from collections import deque
 from dataclasses import dataclass, field

@@ -1,4 +1,13 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Corporate action: a company event that changes your share count or pays you cash
+#   Stock split (ratio=2.0): company gives 2 shares for every 1 you hold
+#     new_quantity = old_quantity * ratio
+#     new_avg_cost = old_avg_cost / ratio  (price per share halves; total value unchanged)
+#   Dividend: company pays cash per share; your share count and avg_cost do NOT change
+#     cash_received = quantity * amount_per_share
+#   avg_cost after split: must be divided by ratio (not multiplied — a bug to watch for here)
 
 from dataclasses import dataclass
 

@@ -1,4 +1,12 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Notional: price × quantity — the dollar value of a trade
+#   Tiered fee: rate steps down as cumulative notional increases, like tax brackets
+#     e.g., 0.10% on first $1M, then 0.06% on next $9M, then 0.03% above $10M
+#   Maker: places a limit order that sits in the book waiting; adds liquidity → lower fee
+#   Taker: places a market order that fills immediately; removes liquidity → higher fee
+#   bps (basis points): 1 bps = 0.01% — standard unit for expressing fee rates
 
 import math
 from collections import defaultdict

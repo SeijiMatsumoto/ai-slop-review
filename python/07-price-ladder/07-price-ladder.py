@@ -1,4 +1,14 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Order book / price ladder: live list of all standing buy and sell orders at each price level
+#   Bid: a standing buy order — best bid = highest price anyone is willing to pay
+#   Ask: a standing sell order — best ask = lowest price anyone is willing to sell for
+#   Spread: best_ask - best_bid (narrower spread = more liquid market)
+#   Mid price: (best_bid + best_ask) / 2
+#   Consuming bids: a seller hitting buy orders, starting from the highest bid downward
+#   Consuming asks: a buyer hitting sell orders, starting from the lowest ask upward
+#   Notional: price × quantity — dollar value of a fill
 
 from dataclasses import dataclass
 

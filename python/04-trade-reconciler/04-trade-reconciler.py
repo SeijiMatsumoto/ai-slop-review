@@ -1,4 +1,12 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Reconciliation: comparing your trade records against a counterparty's to find differences
+#   Break: a trade both sides recorded, but with mismatching fields (e.g., different price)
+#   Missing ours: counterparty recorded a trade we have no record of
+#   Missing theirs: we recorded a trade the counterparty has no record of
+#   Counterparty: the other party in a trade (e.g., a bank or broker)
+#   Notional: price × quantity — dollar value of a trade (used in break_summary)
 
 from dataclasses import dataclass
 

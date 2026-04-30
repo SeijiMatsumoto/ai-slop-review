@@ -1,4 +1,11 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Rolling window: only include data points in [reference_time - window_seconds, reference_time)
+#   EMA (Exponential Moving Average): weighted average where recent points count more
+#     Formula: EMA_t = alpha * value_t + (1 - alpha) * EMA_(t-1);  alpha in (0, 1)
+#   Percentile: p95 means 95% of values fall below this value (useful for latency/risk)
+#   Z-score: (value - mean) / std_dev — how many standard deviations from the mean a point is
 
 from dataclasses import dataclass
 

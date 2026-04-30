@@ -1,4 +1,10 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Threshold: a limit value that triggers an alert when breached
+#   Consecutive: N readings in a row that breach threshold before firing — reduces noisy false alerts
+#   Alert suppression: after an alert fires, silence it for N seconds to avoid alert storms
+#   This file is mostly software logic — no deep trading knowledge required
 
 from dataclasses import dataclass, field
 from collections import defaultdict

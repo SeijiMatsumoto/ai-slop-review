@@ -1,4 +1,13 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Portfolio: collection of holdings across multiple instruments
+#   Weight: fraction of total portfolio value in one instrument
+#     Formula: (quantity × price) / total_portfolio_value
+#   Target weight: desired allocation (e.g., 40% AAPL, 30% MSFT, 20% GOOGL, 10% AMZN)
+#   Drift: sum of |current_weight - target_weight| for all instruments — how far off you are
+#   Rebalance: generate buy/sell trades to move current weights back toward target weights
+#     Formula: target_qty = (target_weight × total_portfolio_value) / instrument_price
 
 from dataclasses import dataclass
 

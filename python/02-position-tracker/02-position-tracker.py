@@ -1,4 +1,17 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Fill: a completed order execution (e.g., "bought 100 AAPL at $150")
+#   Position: number of shares currently held (positive = long, negative = short)
+#   Long: you own shares and profit if price goes up
+#   Short: you sold shares you don't own and profit if price goes down
+#   avg_entry_price (avg_cost): weighted average price paid across all buy fills
+#     Formula on buy: (current_qty * current_avg + new_qty * new_price) / (current_qty + new_qty)
+#     On sell: does NOT change — you didn't buy anything, so cost basis is unchanged
+#   Unrealized P&L: profit/loss on shares still held
+#     Formula: quantity * (market_price - avg_entry_price)
+#   Realized P&L: profit/loss locked in when you sell
+#     Formula: sold_qty * (sell_price - avg_entry_price)
 
 from dataclasses import dataclass, field
 

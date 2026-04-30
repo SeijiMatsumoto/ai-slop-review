@@ -1,4 +1,10 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Notional: price × quantity — the total dollar value of a trade
+#   Notional limit: max dollar value allowed per single trade (a risk control)
+#   Instrument: the thing being traded — here, stock ticker symbols (AAPL, MSFT, etc.)
+#   Side: "buy" or "sell"
 
 from dataclasses import dataclass
 

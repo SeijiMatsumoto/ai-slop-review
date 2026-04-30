@@ -1,4 +1,10 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   VWAP (Volume-Weighted Average Price): average price weighted by trade size
+#     Formula: sum(price * quantity) / sum(quantity)
+#   Notional: price × quantity — the dollar value of a single trade
+#   Window: time range [reference_time - window_seconds, reference_time] — trades inside this count
 
 from dataclasses import dataclass
 

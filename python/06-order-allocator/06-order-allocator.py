@@ -1,4 +1,12 @@
 # Review this code — find bugs, understand the logic, complete the TODOs
+#
+# Domain:
+#   Parent order: a large order split across multiple accounts by weight
+#   Allocation: how many shares each account receives
+#   Pro-rata: each account gets quantity proportional to its weight
+#   Rounding problem: weights × quantity rarely produce whole numbers — allocations may not sum to total
+#   Largest-remainder method: rounding technique that ensures allocations sum exactly to total
+#     (take the floor for each account, then give +1 to accounts with the largest fractional parts)
 
 from dataclasses import dataclass
 
