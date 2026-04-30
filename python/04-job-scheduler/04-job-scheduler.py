@@ -24,10 +24,10 @@ class JobScheduler:
     def __init__(self) -> None:
         self._queue: list[tuple[int, Job]] = []
         self.results: dict[str, object] = {}
-        self.failed: list[Job] = []
+        self.failed: dict[str, tuple[Job, int]] = {}
 
     def schedule(self, job: Job) -> None:
-        heapq.heappush(self._queue, (-job.priority, job))
+        heapq.heappush(self._queue, (job.priority, job))
 
     def run_due(self) -> list[str]:
         now = time.time()
@@ -37,7 +37,7 @@ class JobScheduler:
 
         while self._queue:
             pri, job = heapq.heappop(self._queue)
-            if job.run_at >= now:
+            if job.run_at <= now:
                 ready.append((pri, job))
             else:
                 deferred.append((pri, job))
@@ -47,13 +47,14 @@ class JobScheduler:
 
         for _, job in sorted(ready, key=lambda x: x[0]):
             job.status = "running"
+            job_id = job.job_id
             try:
-                self.results[job.job_id] = job.fn(*job.args)
+                self.results[job_id] = job.fn(*job.args)
                 job.status = "done"
-                ran.append(job.job_id)
+                ran.append(job_id)
             except Exception:
                 job.status = "failed"
-                self.failed.append(job)
+                self.failed[job_id] = (job, self.failed.get(job_id)[1] + 1 if job_id in self.failed else 0)
 
         return ran
 
@@ -66,12 +67,29 @@ class JobScheduler:
             for _, job in sorted(self._queue)
         ]
 
+    def cancel(self, job_id: str) -> bool:
+        jobs = self._queue
+        filtered_jobs = [(priority, job) for priority, job in jobs if job.job_id != job_id]
+        if len(filtered_jobs) == len(jobs):
+            return False
 
-# TODO: Add a cancel(job_id: str) -> bool method that removes a pending job from the
-#       queue before it runs (rebuild the heap without that job)
-# TODO: Add a retry_failed(max_retries: int) method that re-schedules each failed job
-#       up to max_retries times, tracking attempt count per job
+        self._queue = filtered_jobs
+        heapq.heapify(self._queue)
 
+        return True
+
+    def retry_failed(self, max_retries: int):
+        for job_id, job_tuple in self.failed.items():
+            job = job_tuple[0]
+            retries = job_tuple[1]
+            if retries >= max_retries:
+                continue
+
+            job.run_at = time.time()
+            self.failed[job_id] = (job, retries)
+            self.schedule(job)
+
+        return
 
 if __name__ == "__main__":
     scheduler = JobScheduler()
@@ -95,7 +113,7 @@ if __name__ == "__main__":
     print("\n=== run_due ===")
     ran = scheduler.run_due()
     print(f"  Ran: {ran}")
-    print(f"  Failed: {[j.job_id for j in scheduler.failed]}")
+    print(f"  Failed: {list(scheduler.failed.keys())}")
     print(f"  Still pending: {scheduler.pending_count()} (J004 should remain)")
 
     print("\n=== Results ===")
@@ -109,3 +127,33 @@ if __name__ == "__main__":
     ran2 = s2.run_due()
     print(f"  Run order: {ran2} (expected: P1 first, then P2, then P3)")
     print(f"  Results: {s2.results}")
+
+    print("\n=== cancel ===")
+    s3 = JobScheduler()
+    s3.schedule(Job("C001", "cancel-me",    run_at=now + 60, priority=2, fn=lambda: "should not run"))
+    s3.schedule(Job("C002", "keep-me",      run_at=now + 60, priority=1, fn=lambda: "also not run yet"))
+    print(f"  Queue before cancel: {s3.pending_count()} (expected 2)")
+    result = s3.cancel("C001")
+    print(f"  cancel('C001'): {result} (expected True)")
+    print(f"  Queue after cancel: {s3.pending_count()} (expected 1)")
+    print(f"  Remaining job: {s3.queue_snapshot()[0]['job_id']} (expected C002)")
+    result2 = s3.cancel("nonexistent")
+    print(f"  cancel('nonexistent'): {result2} (expected False)")
+
+    print("\n=== retry_failed ===")
+    s4 = JobScheduler()
+    s4.schedule(Job("F001", "will-fail",    run_at=now - 1, priority=1, fn=lambda: 1 / 0))
+    s4.schedule(Job("F002", "will-succeed", run_at=now - 1, priority=2, fn=lambda: "ok"))
+    s4.run_due()
+    print(f"  Failed jobs: {list(s4.failed.keys())} (expected ['F001'])")
+    print(f"  Pending before retry: {s4.pending_count()} (expected 0)")
+    s4.retry_failed(max_retries=2)
+    print(f"  Pending after retry_failed(2): {s4.pending_count()} (expected 1 — F001 re-queued)")
+    ran3 = s4.run_due()
+    print(f"  Ran after retry: {ran3} (expected [] — F001 fails again)")
+    print(f"  Failed list after 2nd run: {list(s4.failed.keys())}")
+    s4.retry_failed(max_retries=2)
+    print(f"  Pending after 2nd retry_failed(2): {s4.pending_count()} (expected 1 — F001 re-queued, still under limit)")
+    s4.run_due()
+    s4.retry_failed(max_retries=2)
+    print(f"  Pending after 3rd retry_failed(2): {s4.pending_count()} (expected 0 — max_retries reached)")
