@@ -19,7 +19,7 @@ class SKU:
 
     @property
     def available(self) -> int:
-        return self.stock + self.reserved
+        return self.stock - self.reserved # don't include reserved?
 
 
 class Inventory:
@@ -28,26 +28,33 @@ class Inventory:
 
     def add_sku(self, sku: SKU) -> None:
         self.skus[sku.sku_id] = sku
-
-    def reserve(self, sku_id: str, qty: int) -> bool:
+    
+    def check_reservable(self, sku_id, qty: int) -> bool:
         sku = self.skus.get(sku_id)
         if sku is None:
             return False
-        if qty > sku.stock:
+        if qty > sku.stock - sku.reserved:
             return False
-        sku.reserved += qty
         return True
+
+    def reserve(self, sku_id: str, qty: int) -> bool:
+        sku = self.skus.get(sku_id)
+        is_reservable = self.check_reservable(sku_id, qty)
+        if is_reservable: 
+            sku.reserved += qty
+            return True
+        return False
 
     def fulfill(self, sku_id: str, qty: int) -> bool:
         sku = self.skus.get(sku_id)
-        if sku is None or sku.reserved < qty:
+        if sku is None or qty > sku.reserved:
             return False
         sku.reserved -= qty
         sku.stock -= qty
         return True
 
     def restock(self, sku_id: str, qty: int) -> None:
-        sku = self.skus.get(sku_id)
+        sku = self.skus.get(sku_id) # what if this sku is not in the inventory?
         if sku:
             sku.stock += qty
 
@@ -63,12 +70,24 @@ class Inventory:
             for s in self.skus.values()
         ]
 
+    def low_stock_alerts(self, threshold: int) -> list[str]:
+        ids: list[str] = []
+        for sku_id, sku in self.skus.items():
+            if sku.stock - sku.reserved < threshold:
+                ids.append(sku_id)
 
-# TODO: Add a low_stock_alerts(threshold: int) -> list[str] method on Inventory that
-#       returns sku_ids where available < threshold
-# TODO: Add a batch_reserve(reservations: dict[str, int]) -> bool method that reserves
-#       multiple SKUs atomically — if any one fails, roll back all reservations made so far
+        return ids
 
+    def batch_reserve(self, reservations: dict[str, int]) -> bool:
+        for sku_id, qty in reservations.items():
+            if self.check_reservable(sku_id, qty) == False:
+                return False
+        for sku_id, qty in reservations.items():
+            self.skus.get(sku_id).reserved += qty
+    
+        return True
+
+# TODO: Add threading - think of ways to optimize the methods I implemented, think of tradeoffs
 
 if __name__ == "__main__":
     inv = Inventory()
@@ -105,3 +124,13 @@ if __name__ == "__main__":
     inv2.reserve("X", 8)
     result = inv2.reserve("X", 5)   # only 2 available — should fail
     print(f"  reserve 5 when only 2 available: {result} (expected False)")
+
+    print("\n=== Low Stock Alerts ===")
+    sku_ids = inv.low_stock_alerts(51)
+    for row in inv.snapshot():
+        print(f"  {row}")
+    print(f"  Low stock alert for {sku_ids}")
+
+    print("\n=== Batch Reserve ===")
+    result = inv.batch_reserve({ 'SKU-A': 10, 'SKU-B': 201 })
+    print(f"  Batch reserve successful: {result}")
